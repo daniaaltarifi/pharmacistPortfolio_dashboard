@@ -1,0 +1,105 @@
+@import 'tailwindcss';
+
+/* Same "The Formula" palette as the portfolio (portfolio-v2-react/src/index.css). */
+@theme {
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --color-ink: #08192d; /* portfolio --foreground */
+  --color-mute: #4d6382;
+  --color-muted: #334c6d; /* portfolio --muted-foreground */
+  --color-primary: #1b4779; /* portfolio --primary */
+  --color-periwinkle: #525de0; /* gradient: right stop */
+  --color-sky: #97b1d8; /* gradient: middle stop */
+  --color-soft: #edf3f9; /* portfolio --secondary */
+  --color-line: #dfe8f3; /* portfolio --border */
+  --color-panel: #eef3fc;
+  --color-panel-line: #d3def2;
+  --color-stripe: #e3eaf8;
+  --color-selected: #d6e1f7;
+  --color-aqua: #2aa7b8;
+  --color-ok: #1f8a5b;
+  --color-ok-soft: #e4f4ec;
+  --color-warn: #a8670f;
+  --color-warn-soft: #fbf0dd;
+  --color-bad: #b3364a;
+  --color-bad-soft: #fbe7ea;
+}
+
+/* The exact portfolio background gradient: white left, periwinkle right. */
+@utility bg-brand {
+  background-image: linear-gradient(270deg, #525de0 0%, #97b1d8 50%, #ffffff 100%);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  button:not(:disabled),
+  [role='button'] {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-aqua);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg border border-line bg-white px-3.5 py-2 text-sm font-medium text-ink transition-colors hover:bg-soft disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply border-primary bg-primary text-white hover:bg-[#163b65];
+  }
+  .btn-ghost {
+    @apply border-transparent bg-transparent text-mute hover:bg-white/60 hover:text-ink;
+  }
+  .btn-danger {
+    @apply text-bad hover:bg-bad-soft;
+  }
+  .btn-danger-solid {
+    @apply border-bad bg-bad text-white hover:bg-[#9a2c3f];
+  }
+  .input {
+    @apply w-full rounded-lg border border-panel-line bg-white px-3 py-2 text-sm text-ink placeholder:text-mute/70 focus:border-primary focus:outline-none;
+  }
+  .label {
+    @apply text-[12.5px] font-semibold text-ink;
+  }
+  .panel {
+    @apply flex min-w-0 flex-col overflow-hidden rounded-xl border border-panel-line bg-panel;
+  }
+  .panel-head {
+    @apply bg-brand flex items-center gap-2.5 px-[18px] py-3;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
