@@ -35,7 +35,7 @@ export function greeting(date = new Date()) {
 }
 
 // Site paths like "/images/..." live on the portfolio, not the dashboard.
-export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'http://localhost:5173').replace(/\/$/, '')
+export const SITE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5173').replace(/\/$/, '')
 
 export function imageSrc(url) {
   if (!url) return ''
