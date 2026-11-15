@@ -235,9 +235,12 @@ export const SECTIONS = [
     path: '/gallery',
     icon: Images,
     description: 'Photos on the Gallery page, newest first.',
-    fields: [{ ...imageUrl, label: 'Photo', required: true }],
-    // Only an image is stored, so the list shows the file name.
-    title: (r) => decodeURIComponent((r.imageUrl ?? '').split('/').pop() || 'Photo'),
+    fields: [
+      { ...imageUrl, label: 'Photo', required: true },
+      { name: 'title', label: 'Title', type: 'text', max: 200, nullable: true, hint: 'Optional caption shown with the photo.' },
+    ],
+    // Photos without a title fall back to the file name in the list.
+    title: (r) => r.title || decodeURIComponent((r.imageUrl ?? '').split('/').pop() || 'Photo'),
     hasImage: true,
   },
 
