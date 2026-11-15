@@ -36,6 +36,15 @@ const sortOrder = {
 }
 
 const imageUrl = { name: 'imageUrl', label: 'Image', type: 'image' }
+// Optional external link (news and events). The server checks it is a full http(s) URL.
+const link = {
+  name: 'link',
+  label: 'Link',
+  type: 'text',
+  max: 500,
+  nullable: true,
+  hint: 'Optional full URL, e.g. https://example.com/article.',
+}
 
 export const SECTIONS = [
   // Career
@@ -142,11 +151,26 @@ export const SECTIONS = [
       { name: 'categoryId', label: 'Category', type: 'category', required: true, half: true },
       { name: 'publishedAt', label: 'Publish date', type: 'date', required: true, half: true },
       { name: 'description', label: 'Body', type: 'textarea', max: 20000, rows: 8, required: true },
+      link,
+      {
+        name: 'status',
+        label: 'Status',
+        type: 'select',
+        required: true,
+        half: true,
+        default: 'draft',
+        hint: 'Only active news appears on the website.',
+        options: [
+          { value: 'draft', label: 'Draft' },
+          { value: 'active', label: 'Active' },
+        ],
+      },
       imageUrl,
     ],
     title: (r) => r.title,
     subtitle: (r) => r.category?.name,
     meta: (r) => formatDate(r.publishedAt),
+    status: (r) => r.status,
     badge: (r) => r.category?.name,
     filterBy: (r) => r.category?.name,
     hasImage: true,
@@ -181,6 +205,7 @@ export const SECTIONS = [
       { name: 'eventDate', label: 'Event date', type: 'date', required: true, half: true },
       { name: 'location', label: 'Location', type: 'text', max: 150, required: true },
       { name: 'summary', label: 'Summary', type: 'textarea', max: 2000, required: true },
+      link,
       imageUrl,
     ],
     title: (r) => r.title,
@@ -375,10 +400,11 @@ export function toPayload(section, form) {
 // Record from the API -> form state.
 export function toForm(section, record) {
   const form = {}
-  for (const { name, type } of section.fields) {
+  for (const { name, type, default: fallback } of section.fields) {
     const value = record?.[name]
     if (type === 'list') form[name] = Array.isArray(value) ? [...value] : []
-    else if (value === null || value === undefined) form[name] = ''
+    // New records start from the field's default (e.g. news status "draft"), if it has one.
+    else if (value === null || value === undefined) form[name] = record ? '' : (fallback ?? '')
     else form[name] = String(value)
   }
   return form

@@ -129,6 +129,18 @@ function Editor({ section, record, onSaved, onDeleted, onClose }) {
   )
 }
 
+// Publishing status pill: green when live on the website, amber while still a draft.
+const STATUS_STYLES = {
+  active: { label: 'Active', className: 'bg-[#e4f6ec] text-[#1d7a46]' },
+  draft: { label: 'Draft', className: 'bg-[#fdf1dc] text-[#9a6200]' },
+}
+
+function StatusPill({ status }) {
+  const style = STATUS_STYLES[status]
+  if (!style) return null
+  return <span className={cn('pill', style.className)}>{style.label}</span>
+}
+
 function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
@@ -272,6 +284,7 @@ export function SectionPage() {
                         {capitalize(section.singular)}
                       </th>
                       {section.badge && <th className="px-3.5 py-3 text-left text-[11.5px] font-semibold tracking-[.07em] text-ink uppercase">Type</th>}
+                      {section.status && <th className="px-3.5 py-3 text-left text-[11.5px] font-semibold tracking-[.07em] text-ink uppercase">Status</th>}
                       {section.meta && <th className="px-3.5 py-3 text-left text-[11.5px] font-semibold tracking-[.07em] text-ink uppercase">Details</th>}
                       <th className="w-24 px-3.5 py-3">
                         <span className="sr-only">Actions</span>
@@ -303,6 +316,11 @@ export function SectionPage() {
                               {section.badge(r) && <span className="pill bg-[#e3f5f7] text-[#16808f]">{section.badge(r)}</span>}
                             </td>
                           )}
+                          {section.status && (
+                            <td className="border-b border-panel-line px-3.5 py-3">
+                              <StatusPill status={section.status(r)} />
+                            </td>
+                          )}
                           {section.meta && (
                             <td className="border-b border-panel-line px-3.5 py-3 whitespace-nowrap tabular-nums text-muted">{section.meta(r, lists)}</td>
                           )}
@@ -326,7 +344,7 @@ export function SectionPage() {
                     })}
                     {shown.length === 0 && (
                       <tr>
-                        <td colSpan={4} className="px-3.5 py-6 text-mute">
+                        <td colSpan={5} className="px-3.5 py-6 text-mute">
                           Nothing matches this filter.
                         </td>
                       </tr>
